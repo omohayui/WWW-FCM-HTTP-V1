@@ -1,6 +1,7 @@
 requires 'Class::Accessor::Lite';
 requires 'JSON';
 requires 'JSON::WebToken';
+requires 'Crypt::OpenSSL::RSA';
 requires 'Furl';
 requires 'HTTP::Status';
 requires 'Carp';
