@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::Mock::Guard qw(mock_guard);
 use Test::Fake::HTTPD;
 use Test::Exception;
 use JSON;
@@ -19,10 +18,8 @@ my $fcm = WWW::FCM::HTTP::V1->new(api_url => 'api_url', api_key_json => $dummy_a
 
 sub test_send {
     my %specs = @_;
-    my ($input, $expects, $expects_exception, $mock, $desc)
-        = @specs{qw/input expects expects_exception mock desc/};
-
-    my $guard = $mock ? mock_guard @$mock : undef;
+    my ($input, $expects, $expects_exception, $desc)
+        = @specs{qw/input expects expects_exception desc/};
 
     subtest $desc => sub {
         my $access_token_httpd = run_http_server {
@@ -48,16 +45,7 @@ sub test_send {
         else {
             throws_ok {
                 $fcm->send($input);
-            } 'Exception';
-            like $@, $expects_exception->{message};
-        }
-
-        if ($guard) {
-            for (my $i = 0; $i < @$mock; $i += 2) {
-                for my $method (sort keys %{ $mock->[$i + 1] }) {
-                    ok +$guard->call_count($mock->[$i], $method);
-                }
-            }
+            } $expects_exception->{message};
         }
     };
 }
@@ -110,6 +98,100 @@ test_send(
             access_token => "test_access_token",
         },
         code => HTTP_OK,
+    },
+);
+
+test_send(
+    desc  => 'unauthorized',
+    input => {
+        message => {
+            token => 'device_token01',
+            notification => {
+                body  => 'This is an FCM notification message!',
+                title => 'FCM Message',
+            },
+        },
+    },
+    expects => {
+        send_data => {},
+        token_code => HTTP_UNAUTHORIZED,
+        code => HTTP_UNAUTHORIZED,
+    },
+    expects_exception => {
+        code => HTTP_UNAUTHORIZED,
+        message => '/Failed to get access token. 401 Unauthorized /',
+    },
+);
+
+test_send(
+    desc  => 'internal server error',
+    input => {
+        message => {
+            token => 'device_token01',
+            notification => {
+                body  => 'This is an FCM notification message!',
+                title => 'FCM Message',
+            },
+        },
+    },
+    expects => {
+        send_data => {
+            message => {
+                token => 'device_token01',
+                notification => {
+                    body  => 'This is an FCM notification message!',
+                    title => 'FCM Message',
+                },
+            },
+        },
+        token_code => HTTP_OK,
+        token_data => {
+            access_token => "test_access_token",
+        },
+        code => HTTP_INTERNAL_SERVER_ERROR,
+        data => 'Cannot read response header: timeout',
+    },
+);
+
+test_send(
+    desc  => 'fcm error: INVALID_ARGUMENT',
+    input => {
+        message => {
+            token => 'device_token01',
+            notification => {
+                body  => 'This is an FCM notification message!',
+                title => 'FCM Message',
+            },
+        },
+    },
+    expects => {
+        send_data => {
+            message => {
+                token => 'device_token01',
+                notification => {
+                    body  => 'This is an FCM notification message!',
+                    title => 'FCM Message',
+                },
+            },
+        },
+        token_code => HTTP_OK,
+        token_data => {
+            access_token => "test_access_token",
+        },
+        code => HTTP_BAD_REQUEST,
+        data => {
+            error => {
+                code => 400,
+                message => "Invalid Argument.",
+                status  => "BAD_REQUEST",
+                details => [
+                    {
+                        '@type'   => "type.googleapis.com/google.firebase.fcm.v1.FcmError",
+                        errorCode => "INVALID_ARGUMENT"
+                    }
+                ]
+            }
+        },
     },
 );
 
