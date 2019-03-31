@@ -44,7 +44,11 @@ SEE ALSO [https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messag
 
 ## new(\\%args)
 
+Create a FCM API Client.
+
 ## send(\\%content)
+
+Request to FCM API.
 
 # LICENSE
 
@@ -55,4 +59,4 @@ it under the same terms as Perl itself.
 
 # AUTHOR
 
-omohayui <omohayui@gamail.com>
+omohayui <omohayui@gmail.com>

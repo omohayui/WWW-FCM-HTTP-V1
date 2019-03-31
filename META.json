@@ -1,7 +1,7 @@
 {
    "abstract" : "Client for Firebase Cloud Messaging HTTP v1 API",
    "author" : [
-      "omohayui <omohayui@gamail.com>"
+      "omohayui <omohayui@gmail.com>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v3.1.4, CPAN::Meta::Converter version 2.150010",
@@ -74,9 +74,6 @@
    },
    "version" : "0.01",
    "x_authority" : "cpan:OMOHAYUI",
-   "x_contributors" : [
-      "omohayui <omohayui@gmail.com>"
-   ],
    "x_serialization_backend" : "JSON::PP version 4.02",
    "x_static_install" : 1
 }

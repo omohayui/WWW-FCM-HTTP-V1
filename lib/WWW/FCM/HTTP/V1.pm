@@ -91,7 +91,11 @@ SEE ALSO L<< https://firebase.google.com/docs/reference/fcm/rest/v1/projects.mes
 
 =head2 new(\%args)
 
+Create a FCM API Client.
+
 =head2 send(\%content)
+
+Request to FCM API.
 
 =head1 LICENSE
 
@@ -102,6 +106,6 @@ it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-omohayui E<lt>omohayui@gamail.comE<gt>
+omohayui E<lt>omohayui@gmail.comE<gt>
 
 =cut
