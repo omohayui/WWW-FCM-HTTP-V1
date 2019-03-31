@@ -44,6 +44,7 @@
          "requires" : {
             "Carp" : "0",
             "Class::Accessor::Lite" : "0",
+            "Crypt::OpenSSL::RSA" : "0",
             "Furl" : "0",
             "HTTP::Status" : "0",
             "JSON" : "0",
@@ -53,6 +54,8 @@
       },
       "test" : {
          "requires" : {
+            "Test::Exception" : "0.43",
+            "Test::Fake::HTTPD" : "0.08",
             "Test::More" : "0.98"
          }
       }
@@ -71,6 +74,9 @@
    },
    "version" : "0.01",
    "x_authority" : "cpan:OMOHAYUI",
-   "x_serialization_backend" : "JSON::PP version 4.00",
+   "x_contributors" : [
+      "omohayui <omohayui@gmail.com>"
+   ],
+   "x_serialization_backend" : "JSON::PP version 4.02",
    "x_static_install" : 1
 }
